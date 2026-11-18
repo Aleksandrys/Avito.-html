@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Avito</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.top{background:#fff;padding:10px 14px 8px;border-bottom:1px solid #f0f0f0}
+.srch{display:flex;align-items:center;background:#f5f5f5;border-radius:12px;padding:10px 14px;gap:8px}
+.srch input{flex:1;border:none;background:none;outline:none;font-size:15px}
+.cart{position:relative;background:#f5f5f5;border:none;border-radius:12px;width:42px;height:42px;font-size:20px;cursor:pointer}
+.cart b{position:absolute;top:-3px;right:-3px;background:#f33;color:#fff;font-size:9px;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.bal-top{font-size:12px;font-weight:700;color:#00aaff;margin-left:8px}
+.wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+.pg{display:none}.pg.on{display:block}
+.banner{background:#1a1a1a;margin:10px 14px;border-radius:14px;padding:14px 18px;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.banner h2{font-size:20px;font-weight:800}
+.banner p{font-size:12px;color:#ccc;margin-top:2px}
+.blogo{background:#ff6b35;color:#fff;padding:6px 10px;border-radius:6px;font-weight:900;font-size:12px;transform:rotate(-4deg)}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 14px}
+.ct{background:#f5f5f5;border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;font-size:11px;font-weight:600}
+.ct.on{background:#e8f4ff}
+.ct i{font-size:26px;display:block;margin-bottom:3px;font-style:normal}
+.sts{display:flex;gap:5px;padding:0 14px 10px;overflow-x:auto}
+.sts::-webkit-scrollbar{display:none}
+.st{background:#f5f5f5;border-radius:16px;padding:5px 10px;font-size:11px;white-space:nowrap}
+.st b{color:#00aaff}
+.ttl{font-size:16px;font-weight:700;padding:10px 14px 6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px 14px}
+.cd{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.cd:active{transform:scale(.97)}
+.ci2{width:100%;height:140px;background:#f0f0f0;position:relative}
+.ci2 img{width:100%;height:100%;object-fit:cover}
+.ci2 .em{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:50px}
+.hrt{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.95);border:none;font-size:14px}
+.hrt.on{color:#f33}
+.bdg{position:absolute;top:6px;left:6px;background:#ff6b35;color:#fff;padding:2px 6px;border-radius:5px;font-size:8px;font-weight:700}
+.cb2{padding:8px}
+.cb2 .nm{font-size:12px;font-weight:500;height:30px;overflow:hidden}
+.cb2 .pr{font-size:15px;font-weight:800;margin-top:3px}
+.cb2 .mt{font-size:10px;color:#888;margin-top:2px}
+.acts{display:flex;gap:4px;margin-top:6px}
+.acts button{flex:1;padding:6px;border:none;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer}
+.bb{background:#00aaff;color:#fff}.bb:disabled{background:#ddd}
+.bm{background:#f0f0f0}
+.br{background:#f33;color:#fff}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8e8ea;display:flex;padding:5px 0;z-index:30}
+.nb{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:1px;color:#999;font-size:9px;cursor:pointer;position:relative}
+.nb.on{color:#00aaff}
+.nb i{font-size:20px;font-style:normal}
+.nb b{position:absolute;top:-1px;right:28%;background:#f33;color:#fff;font-size:8px;min-width:14px;height:14px;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:0 3px;font-weight:700}
+.nb .av2{width:22px;height:22px;border-radius:50%;background:#f33;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.scr{display:none;position:fixed;inset:0;background:#efeae2;z-index:50;flex-direction:column}
+.scr.on{display:flex}
+.sh2{background:#fff;padding:10px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #e8e8ea}
+.sh2 button{background:none;border:none;font-size:20px;color:#00aaff}
+.sh2 .av3{width:32px;height:32px;border-radius:50%;background:#00aaff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sh2 .inf{flex:1}
+.sh2 .inf b{font-size:14px}
+.sh2 .inf small{font-size:10px;color:#888}
+.mss{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:5px}
+.m{max-width:78%;padding:8px 11px;border-radius:14px;font-size:13px;line-height:1.4}
+.m.t{background:#fff;align-self:flex-start}
+.m.o{background:#00aaff;color:#fff;align-self:flex-end}
+.m.s{background:rgba(0,0,0,.08);color:#555;align-self:center;font-size:11px;font-style:italic}
+.quick-q{display:flex;gap:4px;flex-wrap:wrap;padding:6px 10px;background:#fff;border-top:1px solid #e8e8ea}
+.quick-q button{padding:5px 10px;border:1px solid #ddd;border-radius:14px;background:#fff;font-size:11px;cursor:pointer}
+.chat-input-area{background:#fff;padding:8px 10px;border-top:1px solid #e8e8ea;display:flex;gap:6px;align-items:center}
+.chat-input-area input{flex:1;padding:10px;border:1px solid #ddd;border-radius:20px;font-size:13px;outline:none}
+.chat-input-area button{padding:10px 14px;background:#00aaff;color:#fff;border:none;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer}
+.sa2{background:#fff;padding:10px;border-top:1px solid #e8e8ea}
+.sa2 .row{display:flex;gap:5px;margin-bottom:5px}
+.sa2 button{flex:1;padding:9px;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer}
+.sa2 .ok{background:#28a745;color:#fff}
+.sa2 .no{background:#f0f0f0}
+.chl{padding:0 14px}
+.ci4{background:#fff;border-radius:14px;padding:12px;display:flex;gap:10px;margin-bottom:8px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);position:relative}
+.ci4.unread{background:#f0f7ff}
+.ci4 .av7{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;position:relative}
+.ci4 .av7 .prod-img{position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;overflow:hidden}
+.ci4 .av7 .prod-img img{width:100%;height:100%;object-fit:cover}
+.ci4 .info4{flex:1;min-width:0}
+.ci4 .row1{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.ci4 .row1 b{font-size:14px;font-weight:600}
+.ci4 .row1 small{font-size:11px;color:#999;flex-shrink:0;margin-left:8px}
+.ci4 .row2{display:flex;align-items:center;gap:6px;font-size:12px;color:#333;margin-bottom:3px}
+.ci4 .row2 .pname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci4 .row2 .pprice{color:#000;font-weight:600;flex-shrink:0}
+.ci4 .row3{font-size:12px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci4 .dot{position:absolute;top:14px;right:14px;width:8px;height:8px;border-radius:50%;background:#f33}
+.pf2{background:linear-gradient(135deg,#00aaff,#0077cc);color:#fff;border-radius:12px;padding:16px;text-align:center;margin:14px}
+.pf2 .av5{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.25);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 6px}
+.pf2 .bal-big{font-size:22px;font-weight:800;margin-top:6px}
+.pst2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:0 14px;margin-bottom:10px}
+.pst2 div{background:#f5f5f5;border-radius:10px;padding:8px;text-align:center}
+.pst2 b{font-size:14px;color:#00aaff;display:block}
+.pst2 span{font-size:9px;color:#888}
+.myads{padding:0 14px}
+.ma{background:#fff;border-radius:10px;padding:10px;display:flex;gap:10px;align-items:center;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.ma .th{width:54px;height:54px;border-radius:8px;overflow:hidden;background:#f0f0f0;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px}
+.ma .th img{width:100%;height:100%;object-fit:cover}
+.ma .info{flex:1;min-width:0}
+.ma .info b{font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ma .info small{font-size:11px;color:#00aaff;font-weight:700}
+.ma .info .view{font-size:10px;color:#888;display:block;margin-top:2px}
+.ma button{padding:7px 10px;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;background:#f33;color:#fff;flex-shrink:0}
+.fg2{margin-bottom:10px;padding:0 14px}
+.fg2 label{display:block;font-size:11px;font-weight:700;color:#555;margin-bottom:3px}
+.fg2 input,.fg2 select,.fg2 textarea{width:100%;padding:9px;border:1px solid #ddd;border-radius:9px;font-size:13px;font-family:inherit}
+.fg2 textarea{min-height:60px}
+.sb2{margin:0 14px;width:calc(100% - 28px);padding:12px;background:#00aaff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700}
+.reset-btn{margin:10px 14px;width:calc(100% - 28px);padding:10px;background:#f33;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer}
+.lg2{background:#fff;border-radius:10px;padding:6px;margin:0 14px 14px;max-height:250px;overflow-y:auto;font-size:11px}
+.lg2 div{padding:4px 0;border-bottom:1px solid #f0f0f0}
+.md2{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:14px}
+.md2.on{display:flex}
+.md2 .box{background:#fff;border-radius:14px;padding:18px;max-width:360px;width:100%;text-align:center}
+.md2 h2{color:#00aaff;margin-bottom:8px}
+.md2 p{font-size:13px;line-height:1.4;margin-bottom:10px}
+.md2 button{padding:9px 16px;background:#00aaff;color:#fff;border:none;border-radius:9px;font-weight:700;margin:3px}
+.emp{text-align:center;color:#999;padding:30px 14px;font-size:13px}
+.ld{text-align:center;padding:15px;color:#999;font-size:12px}
+.ds{font-size:12px;color:#555;line-height:1.6;background:#f7f7f9;padding:12px;border-radius:10px;margin:10px 0;white-space:pre-wrap}
+.carbadge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700;margin:2px 4px 2px 0}
+.carbadge.ok{background:#e8f5e9;color:#2e7d32}
+.carbadge.bad{background:#ffebee;color:#c62828}
+.carbadge.info{background:#e3f2fd;color:#1565c0}
+.chat-search{padding:12px 14px 8px;background:#fff}
+.chat-search .srch2{display:flex;align-items:center;background:#f5f5f5;border-radius:12px;padding:10px 14px;gap:8px}
+.chat-search .srch2 input{flex:1;border:none;background:none;outline:none;font-size:14px}
+.chat-filters{display:flex;gap:8px;padding:0 14px 10px}
+.chat-filters button{padding:8px 16px;border:none;border-radius:12px;background:#f5f5f5;font-size:13px;font-weight:600;cursor:pointer}
+.chat-filters button.on{background:#1a1a1a;color:#fff}
+.support-chat{margin:0 14px 10px;background:#e8f4ff;border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.support-chat .av6{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.support-chat .info3{flex:1}
+.support-chat .info3 b{font-size:14px;display:block}
+.support-chat .info3 small{font-size:12px;color:#666}
+.inv-btn{padding:12px 24px;background:#00aaff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin:8px auto;display:block}
+.section-label{font-size:13px;font-weight:700;margin:12px 0 6px;padding:0 4px}
+.section-label.green{color:#28a745}
+.section-label.orange{color:#ff7a00}
+.save-indicator{position:fixed;top:60px;right:10px;background:#28a745;color:#fff;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;opacity:0;transition:opacity 0.3s;z-index:100;pointer-events:none}
+.save-indicator.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="save-indicator" id="save-indicator">💾 Сохранено</div>
+
+<div class="top">
+<div class="srch">
+<span>🔍</span>
+<input id="q" placeholder="Поиск в Тольятти" oninput="doSearch()">
+<span class="bal-top" id="bal-top">100 000 ₽</span>
+<button class="cart" onclick="openCart()">🛒<b id="cb">0</b></button>
+</div>
+</div>
+
+<div class="wrap" id="wrap">
+
+<div class="pg on" id="p-home">
+<div class="banner">
+<div><h2>Чёрная пятница</h2><p>Скидки до 70% на всё!</p></div>
+<div class="blogo">ХВАТ<br>АМБА</div>
+</div>
+<div class="cats" id="cats"></div>
+<div class="sts">
+<div class="st">💰 Баланс <b id="bal">100 000 ₽</b></div>
+<div class="st">📦 Товары <b id="inv">0</b></div>
+<div class="st">⭐ Репутация <b id="rep">50</b></div>
+<div class="st">📈 Прибыль <b id="prf">0 ₽</b></div>
+<div class="st">📅 День <b id="day">1</b>/30</div>
+</div>
+<div class="ttl">Рекомендации <small id="evt"></small></div>
+<div class="grid" id="mkt"></div>
+<div class="ld" id="ld">Загрузка...</div>
+</div>
+
+<div class="pg" id="p-fav"><div class="ttl">Избранное</div><div class="grid" id="fav"></div></div>
+
+<div class="pg" id="p-post">
+<div class="ttl">Подать объявление</div>
+<div class="fg2"><label>Название</label><input id="an" placeholder="Например: Logitech G29"></div>
+<div class="fg2"><label>Категория</label><select id="ac"><option>Электроника</option><option>Авто</option><option>Для дома</option><option>Одежда</option><option>Спорт</option><option>Игры</option><option>Работа</option><option>Растения</option><option>Услуги</option></select></div>
+<div class="fg2"><label>Бренд</label><input id="ab" placeholder="Apple"></div>
+<div class="fg2"><label>Цена</label><input id="ap" type="number" placeholder="50000"></div>
+<div class="fg2"><label>Описание</label><textarea id="ad"></textarea></div>
+<button class="sb2" onclick="postAd()">Опубликовать</button>
+</div>
+
+<div class="pg" id="p-chats">
+<div class="chat-search">
+<div class="srch2"><span>🔍</span><input id="chat-q" placeholder="Поиск по сообщениям" oninput="renderChats()"></div>
+</div>
+<div class="chat-filters">
+<button class="on" id="cf-all" onclick="setChatFilter('all')">Все</button>
+<button id="cf-un" onclick="setChatFilter('unread')">Непрочитанные</button>
+</div>
+<div class="support-chat" onclick="openSupport()">
+<div class="av6">🎧</div>
+<div class="info3"><b>Поддержка Авито</b><small>Будем рады помочь</small></div>
+</div>
+<div class="chl" id="clist"></div>
+</div>
+
+<div class="pg" id="p-prof">
+<div class="pf2"><div class="av5">А</div><b>Перекупщик</b><div class="bal-big" id="bal-big">100 000 ₽</div><div>⭐ <span id="rep2">50</span>/100</div></div>
+<div class="pst2"><div><b id="sd">0</b><span>Сделок</span></div><div><b id="sa">0</b><span>Объявлений</span></div><div><b id="sf">0</b><span>Избранное</span></div></div>
+<div class="ttl">📋 Мои объявления</div>
+<div class="myads" id="myads"></div>
+<div class="ttl">История</div>
+<div class="lg2" id="log"></div>
+<button class="reset-btn" onclick="resetGame()">🗑️ Сбросить прогресс</button>
+</div>
+
+</div>
+
+<div class="scr" id="scr">
+<div class="sh2">
+<button onclick="closeChat()">←</button>
+<div class="av3" id="cav"></div>
+<div class="inf"><b id="cnm"></b><br><small id="cst"></small></div>
+</div>
+<div class="mss" id="mss"></div>
+<div class="quick-q" id="quick-q"></div>
+<div class="chat-input-area">
+<input id="chat-input" type="text" placeholder="Напишите сообщение..." onkeypress="if(event.key==='Enter')sendTextMessage()">
+<button onclick="sendTextMessage()">➤</button>
+</div>
+<div class="sa2" id="cact"></div>
+</div>
+
+<div class="nav">
+<button class="nb on" onclick="sw('home',0)"><i>🔍</i>Поиск</button>
+<button class="nb" onclick="sw('fav',1)"><i>🤍</i>Избранное<b id="fn" style="display:none">0</b></button>
+<button class="nb" onclick="sw('post',2)"><i>➕</i>Объявления</button>
+<button class="nb" onclick="sw('chats',3)"><i>💬</i>Сообщения<b id="cn" style="display:none">0</b></button>
+<button class="nb" onclick="sw('prof',4)"><div class="av2">А</div>Профиль</button>
+</div>
+
+<div class="md2" id="md"><div class="box"><h2 id="mt"></h2><p id="mx"></p><button onclick="location.reload()">Заново</button></div></div>
+
+<script>
+var FB={};
+FB.phone="📱";FB.laptop="💻";FB.pc="🖥️";FB.gpu="🎛️";FB.cpu="🧠";FB.monitor="🖥️";FB.console="🎮";FB.watch="⌚";FB.airpod="🎧";FB.headph="🎧";FB.wheel="🎮";FB.car_sedan="🚗";FB.car_suv="🚙";FB.car_minivan="🚐";FB.car_sport="🏎️";FB.motorcycle="🏍️";FB.scooter="🛴";FB.bike="🚲";FB.fridge="🧊";FB.washer="🧺";FB.tv="📺";FB.vacuum="🧹";FB.robot="🤖";FB.coffee="☕";FB.guitar="🎸";FB.jacket="🧥";FB.shoes="👟";FB.bag="👜";FB.book="📖";FB.painting="🖼️";FB.coins="🪙";FB.dumbbell="🏋️";FB.treadmill="🏃";FB.glasses="🕶️";FB.pot="🍲";FB.drill="🔧";FB.box="📦";FB.briefcase="💼";FB.plant="🌿";FB.keyboard="⌨️";FB.mouse="🖱️";FB.sofa="🛋️";FB.bed="🛏️";FB.chair="🪑";FB.pullup="🤸";FB.backpack="🎒";
+
+var T=[];
+T.push(["Logitech G29","wheel","Logitech","Игры",25000,"common",0.8,{type:"руль"},["Logitech G29 steering wheel.jpg"]]);
+T.push(["Thrustmaster T300","wheel","Thrustmaster","Игры",45000,"rare",0.65,{type:"руль"},["Thrustmaster TX Racing Wheel Leather edition - front.jpg"]]);
+T.push(["MOZA R5","wheel","MOZA","Игры",55000,"rare",0.7,{type:"руль"},["MOZA KS Racing Steering Wheel Controller.jpg"]]);
+T.push(["MOZA KS","wheel","MOZA","Игры",120000,"legendary",0.5,{type:"руль"},["MOZA KS Racing Steering Wheel Controller.jpg"]]);
+T.push(["PS5 Slim","console","Sony","Игры",55000,"rare",0.95,{ssd:"1 ТБ"},["PlayStation 5.jpg"]]);
+T.push(["PS5 Digital","console","Sony","Игры",45000,"common",0.9,{ssd:"1 ТБ"},["PS5DigitalEdition.png"]]);
+T.push(["Xbox Series X","box","Microsoft","Игры",52000,"rare",0.8,{ssd:"1 ТБ"},["Xbox series X (50648118708).jpg"]]);
+T.push(["Switch OLED","console","Nintendo","Игры",35000,"common",0.85,{scr:"7 OLED"},["Nintendo Switch OLED.jpg"]]);
+T.push(["Steam Deck","console","Valve","Игры",65000,"rare",0.7,{ssd:"512 ГБ"},["Steam Deck (front).jpg"]]);
+T.push(["RTX 4090","gpu","NVIDIA","Электроника",180000,"legendary",0.85,{vram:"24 ГБ"},["GeForce RTX 4090.jpg"]]);
+T.push(["RTX 4080 SUPER","gpu","NVIDIA","Электроника",120000,"rare",0.8,{vram:"16 ГБ"},["GeForce RTX 4080.jpg"]]);
+T.push(["RTX 4070","gpu","NVIDIA","Электроника",65000,"common",0.7,{vram:"12 ГБ"},["GeForce RTX 4070.jpg"]]);
+T.push(["RTX 4060 Ti","gpu","NVIDIA","Электроника",42000,"common",0.65,{vram:"8 ГБ"},["GeForce RTX 4060.jpg"]]);
+T.push(["RTX 3080","gpu","NVIDIA","Электроника",52000,"common",0.5,{vram:"10 ГБ"},["GeForce RTX 3080.jpg"]]);
+T.push(["RX 7900 XTX","gpu","AMD","Электроника",95000,"rare",0.65,{vram:"24 ГБ"},["AMD Radeon RX 7900 XTX.jpg"]]);
+T.push(["RX 7800 XT","gpu","AMD","Электроника",52000,"common",0.6,{vram:"16 ГБ"},["AMD Radeon RX 7800 XT.jpg"]]);
+T.push(["i9-14900K","cpu","Intel","Электроника",62000,"legendary",0.7,{cores:"24"},["Intel Core i9-14900K.jpg"]]);
+T.push(["i7-14700K","cpu","Intel","Электроника",42000,"rare",0.75,{cores:"20"},["Intel Core i7-14700K.jpg"]]);
+T.push(["i5-13600K","cpu","Intel","Электроника",28000,"common",0.7,{cores:"14"},["Intel Core i5-13600K.jpg"]]);
+T.push(["Ryzen 9 9950X","cpu","AMD","Электроника",78000,"legendary",0.6,{cores:"16"},["AMD Ryzen 9 9950X.jpg"]]);
+T.push(["Ryzen 7 7800X3D","cpu","AMD","Электроника",45000,"rare",0.8,{cores:"8"},["AMD Ryzen 7 7800X3D.jpg"]]);
+T.push(["Ryzen 5 7600X","cpu","AMD","Электроника",22000,"common",0.7,{cores:"6"},["AMD Ryzen 5 7600X.jpg"]]);
+T.push(["Игровой ПК","pc","Сборка","Электроника",120000,"rare",0.8,{gpu:"RTX 4070"},["Computer.tower.750pix.jpg"]]);
+T.push(["Монитор 27 4K","monitor","LG","Электроника",45000,"rare",0.75,{size:"27"},["Computer monitor.jpg"]]);
+T.push(["iPhone 15 Pro Max","phone","Apple","Электроника",125000,"rare",0.95,{mem:"256 ГБ"},["IPhone 15 pro max.jpg"]]);
+T.push(["iPhone 15 Pro","phone","Apple","Электроника",95000,"rare",0.9,{mem:"128 ГБ"},["Apple iPhone 15 Pro.jpg"]]);
+T.push(["iPhone 14","phone","Apple","Электроника",65000,"common",0.8,{mem:"128 ГБ"},["IPhone 15 pro model.jpg"]]);
+T.push(["MacBook Pro 16","laptop","Apple","Электроника",320000,"legendary",0.7,{ram:"36 ГБ"},["Apple MacBook Pro (M3).jpg"]]);
+T.push(["MacBook Air 15","laptop","Apple","Электроника",135000,"rare",0.85,{ram:"16 ГБ"},["MacBook Pro.jpg"]]);
+T.push(["Galaxy S24 Ultra","phone","Samsung","Электроника",115000,"rare",0.9,{cam:"200 Мп"},["Samsung Galaxy S24 Ultra.jpg"]]);
+T.push(["Apple Watch Ultra","watch","Apple","Электроника",85000,"rare",0.75,{case:"49 мм"},["Apple Watch Series 10.jpg"]]);
+T.push(["AirPods Pro 2","airpod","Apple","Электроника",22000,"common",0.85,{chip:"H2"},["Apple airpods pro.jpg"]]);
+T.push(["Sony WH-1000XM5","headph","Sony","Электроника",32000,"common",0.75,{bat:"30 ч"},["Sony S Wireless Headphones (47103208).jpeg"]]);
+T.push(["Tesla Model Y","car_suv","Tesla","Авто",5500000,"rare",0.65,{range:"533 км"},["Tesla Model Y 3.jpg"]]);
+T.push(["Tesla Model 3","car_sedan","Tesla","Авто",4500000,"rare",0.6,{range:"602 км"},["2020 Tesla Model 3.jpg"]]);
+T.push(["BMW X5","car_suv","BMW","Авто",7500000,"legendary",0.45,{hp:"249 л.с."},["BMW X5 (E70) front.jpg"]]);
+T.push(["Mercedes S-Class","car_sedan","Mercedes","Авто",15000000,"legendary",0.25,{hp:"380 л.с."},["Mercedes-Benz S Class (2).jpg"]]);
+T.push(["Mercedes G-Class","car_suv","Mercedes","Авто",18000000,"legendary",0.3,{hp:"422 л.с."},["Mercedes-Benz G 550 (W464) front.jpg"]]);
+T.push(["Audi Q8","car_suv","Audi","Авто",9000000,"legendary",0.35,{hp:"340 л.с."},["Audi Q8 IMG 3134.jpg"]]);
+T.push(["Toyota Camry","car_sedan","Toyota","Авто",3500000,"rare",0.7,{hp:"249 л.с."},["Toyota Camry (XV70) IMG 9081.jpg"]]);
+T.push(["Lexus LX 600","car_suv","Lexus","Авто",12000000,"legendary",0.3,{hp:"415 л.с."},["2023 Lexus LX 600, front 6.13.24.jpg"]]);
+T.push(["Porsche 911","car_sport","Porsche","Авто",15000000,"legendary",0.2,{hp:"385 л.с."},["Porsche 911 2.jpg"]]);
+T.push(["Lada Vesta","car_sedan","LADA","Авто",650000,"common",0.8,{hp:"106 л.с."},["Lada Vesta (cropped).jpg"]]);
+T.push(["Lada Granta","car_sedan","LADA","Авто",450000,"common",0.85,{hp:"90 л.с."},["Lada Granta Classic sedan white front.jpg"]]);
+T.push(["Kia Rio","car_sedan","Kia","Авто",950000,"common",0.75,{hp:"123 л.с."},["Kia Rio FL 2020 Russian.jpg"]]);
+T.push(["Hyundai Solaris","car_sedan","Hyundai","Авто",900000,"common",0.7,{hp:"123 л.с."},["2021 Hyundai Solaris white front.jpg"]]);
+T.push(["VW Polo","car_sedan","Volkswagen","Авто",1100000,"common",0.65,{hp:"125 л.с."},["2018 Volkswagen Polo R-Line TSi 1.0 Front.jpg"]]);
+T.push(["Skoda Octavia","car_sedan","Skoda","Авто",1800000,"rare",0.6,{hp:"150 л.с."},["Skoda Octavia IV IMG 3120.jpg"]]);
+T.push(["Mazda CX-5","car_suv","Mazda","Авто",2200000,"rare",0.6,{hp:"194 л.с."},["2022 Mazda CX-5 2.0 front.jpg"]]);
+T.push(["Range Rover Sport","car_suv","Land Rover","Авто",9500000,"legendary",0.35,{hp:"360 л.с."},["Range Rover Sport front.jpg"]]);
+T.push(["Volvo XC90","car_suv","Volvo","Авто",5500000,"rare",0.5,{hp:"320 л.с."},["Volvo XC90 front.JPG"]]);
+T.push(["BMW R1250GS","motorcycle","BMW","Авто",1800000,"rare",0.5,{hp:"136 л.с."},["Mountain bicycle.jpg"]]);
+T.push(["Ducati Panigale","motorcycle","Ducati","Авто",2500000,"legendary",0.4,{hp:"214 л.с."},["Mountain bicycle.jpg"]]);
+T.push(["Yamaha MT-09","motorcycle","Yamaha","Авто",950000,"rare",0.55,{hp:"119 л.с."},["Mountain bicycle.jpg"]]);
+T.push(["Xiaomi Scooter Pro 2","scooter","Xiaomi","Спорт",35000,"common",0.7,{range:"45 км"},["Xiaomi M365.jpg"]]);
+T.push(["Ninebot Max G30","scooter","Ninebot","Спорт",45000,"rare",0.65,{range:"65 км"},["Electric kick scooter in Echaz.jpg"]]);
+T.push(["Kugoo G-Booster","scooter","Kugoo","Спорт",120000,"legendary",0.45,{range:"80 км"},["Electric kick scooter in Echaz.jpg"]]);
+T.push(["Trek Marlin 7","bike","Trek","Спорт",65000,"rare",0.6,{wheels:"29"},["Mountain bicycle.jpg"]]);
+T.push(["Samsung холодильник","fridge","Samsung","Для дома",65000,"rare",0.6,{vol:"367 л"},["Refrigerator.JPG"]]);
+T.push(["LG стиральная","washer","LG","Для дома",55000,"rare",0.6,{load:"8 кг"},["Washing machine.jpg"]]);
+T.push(["Dyson V15","vacuum","Dyson","Для дома",55000,"rare",0.7,{bat:"60 мин"},["Dyson vacuum cleaner.jpg"]]);
+T.push(["Samsung TV 65","tv","Samsung","Для дома",95000,"rare",0.6,{size:"65"},["A flat-screen television.jpg"]]);
+T.push(["IKEA диван","sofa","IKEA","Для дома",45000,"common",0.6,{size:"240 см"},["Couch-furniture-living-room-sofa (24300293356).jpg"]]);
+T.push(["IKEA кровать","bed","IKEA","Для дома",28000,"common",0.6,{size:"160x200"},["Couch-furniture-living-room-sofa (24300293356).jpg"]]);
+T.push(["Herman Miller кресло","chair","Herman Miller","Для дома",85000,"legendary",0.5,{type:"эргономичный"},["Couch-furniture-living-room-sofa (24300293356).jpg"]]);
+T.push(["Secretlab кресло","chair","Secretlab","Для дома",45000,"rare",0.6,{type:"игровой"},["Couch-furniture-living-room-sofa (24300293356).jpg"]]);
+T.push(["Гантели 20 кг","dumbbell","—","Спорт",8000,"common",0.55,{weight:"2x10 кг"},["TwoDumbbells.JPG"]]);
+T.push(["Беговая дорожка","treadmill","Proxima","Спорт",55000,"rare",0.5,{speed:"16 км/ч"},["Treadmill-gym.jpg"]]);
+T.push(["Nike Air Max","shoes","Nike","Одежда",12000,"common",0.8,{size:"43"},["Sneakers.jpg"]]);
+T.push(["Куртка North Face","jacket","The North Face","Одежда",28000,"rare",0.7,{size:"M"},["Ehlel Winter Jacket.jpg"]]);
+T.push(["Fender Stratocaster","guitar","Fender","Коллекции",85000,"rare",0.45,{type:"электро"},["Fender strat.jpg"]]);
+T.push(["Монеты СССР","coins","—","Коллекции",45000,"rare",0.3,{count:"120 шт"},["Coin collection.jpg"]]);
+T.push(["Монстера","plant","—","Растения",3500,"common",0.5,{height:"80 см"},["Mountain bicycle.jpg"]]);
+T.push(["Ремонт iPhone","briefcase","—","Услуги",5000,"common",0.7,{time:"1-2 часа"},["Office work.jpg"]]);
+T.push(["Программист","briefcase","—","Работа",150000,"rare",0.9,{salary:"от 150 000"},["Programming.jpg"]]);
+
+var CATS=[];
+CATS.push(["all","🔥","Все"]);CATS.push(["Авто","🚗","Авто"]);CATS.push(["Электроника","📱","Электроника"]);CATS.push(["Игры","🎮","Игры"]);CATS.push(["Для дома","🏠","Дом"]);CATS.push(["Одежда","👕","Одежда"]);CATS.push(["Спорт","⚽","Спорт"]);CATS.push(["Работа","💼","Работа"]);CATS.push(["Растения","🌿","Растения"]);CATS.push(["Услуги","🛠️","Услуги"]);CATS.push(["Коллекции","🎨","Коллекции"]);
+
+var CITIES=["Все","Москва","Санкт-Петербург","Тольятти","Казань","Екатеринбург","Новосибирск","Краснодар","Самара","Сочи","Уфа","Пермь"];
+var EV=["🍎 Бум на Apple!","🚗 Авторынок вверх!","🎮 Игровой бум!","🖥️ Сезон GPU!","📉 Рынок падает","💸 Активные покупатели!",null,null];
+var BN=["Алексей","Мария","Дмитрий","Анна","Сергей","Ольга","Иван","Екатерина","Павел","Наталья","Артём","Юлия","Максим","Татьяна","Никита","Владимир","Елена","Андрей","Даниил","Жанна","Александр","Полина","Роман","Виктория","Кирилл","Дарья","Тимур","Алиса","Илья","Варвара","Матвей","Ева"];
+var BA=["👨","👩","🧔","👱","👨‍🦰","👩‍🦰","🧑","👷","🕵️","👨‍💻","👩‍🎨","🤵","👸"];
+var AV_COLORS=["#e74c3c","#3498db","#2ecc71","#f39c12","#9b59b6","#1abc9c","#e67e22","#34495e"];
+var GR=["Здравствуйте! Ещё продаётся?","Добрый день! Актуально?","Привет! Продаёте?"];
+var SG=["Здравствуйте! Интересует ваш товар","Добрый день! Ещё в продаже?","Привет! Можно скидку?"];
+
+var S={};
+S.bal=100000;S.day=1;S.inv=[];S.mkt=[];S.prf=0;S.rep=50;S.cat="all";S.city="Все";S.q="";S.fav=[];S.chats=[];S.cur=null;S.un=0;S.deals=0;S.ads=0;S.loading=false;S.chatFilter="all";S.npcBuyCount=0;
+
+var nid=1;
+function U(){return nid++;}
+function R(a){return a[Math.floor(Math.random()*a.length)];}
+function url(f){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width=240";}
+function urlB(f){return "https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(f)+"?width=900";}
+function fm(n){if(n===null||n===undefined||isNaN(n))return "0 ₽";return n.toLocaleString("ru-RU")+" ₽";}
+
+// ===== СОХРАНЕНИЕ ИГРЫ =====
+function saveGame(){
+try{
+var saveData={
+bal:S.bal,day:S.day,inv:S.inv,mkt:S.mkt,prf:S.prf,rep:S.rep,
+cat:S.cat,city:S.city,fav:S.fav,chats:S.chats,
+un:S.un,deals:S.deals,ads:S.ads,npcBuyCount:S.npcBuyCount||0,
+nid:nid
+};
+localStorage.setItem('avito_save',JSON.stringify(saveData));
+var ind=document.getElementById('save-indicator');
+if(ind){
+ind.classList.add('show');
+setTimeout(function(){ind.classList.remove('show');},1500);
+}
+}catch(e){
+console.log('Ошибка сохранения:',e);
+}
+}
+
+function loadGame(){
+try{
+var saved=localStorage.getItem('avito_save');
+if(saved){
+var data=JSON.parse(saved);
+S.bal=data.bal||100000;
+S.day=data.day||1;
+S.inv=data.inv||[];
+S.mkt=data.mkt||[];
+S.prf=data.prf||0;
+S.rep=data.rep||50;
+S.cat=data.cat||"all";
+S.city=data.city||"Все";
+S.fav=data.fav||[];
+S.chats=data.chats||[];
+S.un=data.un||0;
+S.deals=data.deals||0;
+S.ads=data.ads||0;
+S.npcBuyCount=data.npcBuyCount||0;
+if(data.nid)nid=data.nid;
+return true;
+}
+}catch(e){
+console.log('Ошибка загрузки:',e);
+}
+return false;
+}
+
+function resetGame(){
+if(confirm('Вы уверены? Весь прогресс будет удалён!')){
+localStorage.removeItem('avito_save');
+location.reload();
+}
+}
+
+function log(t,c){var l=document.getElementById("log");if(!l)return;var e=document.createElement("div");e.textContent="[Д"+S.day+"] "+t;l.insertBefore(e,l.firstChild);}
+
+function fmtDate(day){
+if(day===S.day)return "сегодня";
+if(day===S.day-1)return "вчера";
+var days=["вс","пн","вт","ср","чт","пт","сб"];
+if(S.day-day<7)return days[day%7];
+return day+" нояб";
+}
+
+var ANSWERS={};
+ANSWERS["состояние"]=["Товар в отличном состоянии.","Состояние хорошее.","Идеальное состояние."];
+ANSWERS["дефект"]=["Дефектов нет.","Без дефектов."];
+ANSWERS["работ"]=["Работает отлично.","Всё работает."];
+ANSWERS["нов"]=["Да, новый.","Новый, в упаковке."];
+ANSWERS["торг"]=["Торг уместен.","Небольшой торг возможен."];
+ANSWERS["скидк"]=["Скидку сделаю при быстрой сделке."];
+ANSWERS["цен"]=["Цена обсудима."];
+ANSWERS["встрет"]=["Могу встретиться в центре.","Встреча в удобном месте."];
+ANSWERS["достав"]=["Доставка по договорённости."];
+ANSWERS["забр"]=["Забрать можно в любое время."];
+ANSWERS["когд"]=["В любое время."];
+ANSWERS["докум"]=["Все документы в порядке."];
+ANSWERS["дтп"]=["Без ДТП."];
+ANSWERS["то"]=["Все ТО у дилера."];
+ANSWERS["пробег"]=["Пробег родной."];
+ANSWERS["владел"]=["Один владелец."];
+ANSWERS["привет"]=["Здравствуйте! Да, ещё в продаже."];
+ANSWERS["здравств"]=["Здравствуйте! Да, продаю."];
+ANSWERS["прода"]=["Да, ещё продаю."];
+ANSWERS["фото"]=["Фото реальные."];
+ANSWERS["почем"]=["Цена в объявлении."];
+ANSWERS["гарант"]=["Гарантия закончилась, но всё работает."];
+ANSWERS["комплект"]=["Комплект полный."];
+
+var CAR_ANSWERS={};
+CAR_ANSWERS["состояние"]=["Машина в отличном состоянии.","Сел и поехал."];
+CAR_ANSWERS["пробег"]=["Пробег родной, не скручен."];
+CAR_ANSWERS["дтп"]=["Без ДТП, кузов в родной краске."];
+CAR_ANSWERS["то"]=["Все ТО у дилера."];
+CAR_ANSWERS["докум"]=["Все документы в порядке, ПТС оригинал."];
+CAR_ANSWERS["владел"]=["Один владелец по ПТС."];
+CAR_ANSWERS["торг"]=["Торг у капота."];
+CAR_ANSWERS["встрет"]=["Могу встретиться на СТО."];
+
+var BUYER_TYPES={};
+BUYER_TYPES["щедрый"]={min:0.9,max:1.15,pat:3,greet:"Деньги на руках, готов забрать сегодня!"};
+BUYER_TYPES["торгаш"]={min:0.5,max:1.0,pat:5,greet:"Давайте поторгуемся."};
+BUYER_TYPES["скупердяй"]={min:0.35,max:0.75,pat:2,greet:"Отдам сколько не жалко."};
+BUYER_TYPES["обычный"]={min:0.65,max:0.95,pat:3,greet:""};
+BUYER_TYPES["коллекционер"]={min:0.85,max:1.25,pat:4,greet:"Ищу именно такую вещь!"};
+BUYER_TYPES["автолюбитель"]={min:0.7,max:1.1,pat:4,greet:"Машинку присматриваю.",car:true};
+
+function gen(){
+var r=Math.random()*100;
+var sel="common";
+if(r>=90)sel="legendary";
+else if(r>=55)sel="rare";
+var cand=[];
+for(var i=0;i<T.length;i++){if(T[i][5]===sel)cand.push(T[i]);}
+if(cand.length===0)cand=T;
+var t=R(cand);
+var price=Math.round(t[4]*(0.4+Math.random()*0.9)/100)*100;
+var mk=Math.round(t[4]*(0.85+Math.random()*0.35)/100)*100;
+var conds=["Новый","Отличное","Хорошее","Удовл."];
+var ci=1;
+var rr=Math.random();
+if(rr<0.2)ci=0;else if(rr<0.6)ci=1;else if(rr<0.8)ci=2;else ci=3;
+var yr=t[3]==="Авто"?2015+Math.floor(Math.random()*10):2020+Math.floor(Math.random()*5);
+var isCar=(t[3]==="Авто"&&(t[1]==="car_sedan"||t[1]==="car_suv"||t[1]==="car_minivan"||t[1]==="car_sport"));
+var mil=isCar?(ci===0?0:Math.floor(Math.random()*150000)):null;
+var dtp=isCar?(Math.random()<0.25):null;
+var owners=isCar?(Math.random()<0.6?1:(Math.random()<0.8?2:3)):null;
+var service=isCar?(Math.random()<0.7):null;
+var engine=isCar?R(["бензин","дизель","электро","гибрид"]):null;
+var trans=isCar?R(["механика","автомат","вариатор","робот"]):null;
+var drive=isCar?R(["передний","задний","полный"]):null;
+var color=isCar?R(["белый","чёрный","серый","синий","красный","серебристый"]):null;
+var warranty=(t[3]==="Электроника"||t[3]==="Игры")?(Math.random()<0.4):null;
+var box=(t[3]==="Электроника"||t[3]==="Игры"||t[3]==="Одежда")?(Math.random()<0.6):null;
+var districts=["Центр","Автозаводский","Комсомольский","Север","Юг","Запад","Восток"];
+var item={};
+item.id=U();item.n=t[0];item.ic=t[1];item.br=t[2];item.cat=t[3];item.base=t[4];
+item.price=price;item.mk=mk;item.bought=price;item.list=null;item.rq=t[5];item.dm=t[6];
+item.sp=t[7];item.imgs=t[8];item.cond=conds[ci];item.yr=yr;
+item.city=R(CITIES.slice(1));item.district=R(districts);
+item.mil=mil;item.dtp=dtp;item.owners=owners;item.service=service;
+item.engine=engine;item.trans=trans;item.drive=drive;item.color=color;
+item.warranty=warranty;item.box=box;
+item.seller=R(BN);item.rate=(4+Math.random()).toFixed(1);item.day=S.day;
+return item;
+}
+
+function fill(){var c=20+Math.floor(Math.random()*8);for(var i=0;i<c;i++)S.mkt.push(gen());}
+
+function loadMore(){
+if(S.loading)return;
+S.loading=true;
+var ld=document.getElementById("ld");
+if(ld)ld.style.display="block";
+setTimeout(function(){fill();S.loading=false;if(ld)ld.style.display="none";doRender();},300);
+}
+
+function updateStats(){
+var el;
+el=document.getElementById("bal");if(el)el.textContent=fm(S.bal);
+el=document.getElementById("bal-top");if(el)el.textContent=fm(S.bal);
+el=document.getElementById("bal-big");if(el)el.textContent=fm(S.bal);
+el=document.getElementById("inv");if(el)el.textContent=S.inv.length;
+el=document.getElementById("rep");if(el)el.textContent=S.rep;
+el=document.getElementById("prf");if(el)el.textContent=fm(S.prf);
+el=document.getElementById("day");if(el)el.textContent=S.day;
+el=document.getElementById("cb");if(el)el.textContent=S.inv.length;
+var f=S.fav.length;
+el=document.getElementById("fn");if(el){el.style.display=f?"flex":"none";el.textContent=f;}
+el=document.getElementById("cn");if(el){el.style.display=S.un?"flex":"none";el.textContent=S.un;}
+}
+
+function sw(p,i){
+var pgs=document.querySelectorAll(".pg");
+for(var k=0;k<pgs.length;k++)pgs[k].classList.remove("on");
+var el=document.getElementById("p-"+p);
+if(el)el.classList.add("on");
+var nbs=document.querySelectorAll(".nb");
+for(var k=0;k<nbs.length;k++)nbs[k].classList.remove("on");
+if(nbs[i])nbs[i].classList.add("on");
+var wrap=document.getElementById("wrap");
+if(wrap)wrap.scrollTop=0;
+if(p==="chats"){S.un=0;updateStats();renderChats();}
+if(p==="fav")renderFav();
+if(p==="prof")renderProf();
+}
+
+function openCart(){sw("prof",4);setTimeout(function(){var myads=document.getElementById("myads");if(myads)myads.scrollIntoView({behavior:"smooth"});},300);}
+
+function doSearch(){var q=document.getElementById("q");S.q=q?q.value.toLowerCase():"";doRender();}
+function setChatFilter(f){S.chatFilter=f;document.getElementById("cf-all").classList.toggle("on",f==="all");document.getElementById("cf-un").classList.toggle("on",f==="unread");renderChats();}
+
+function renderCats(){
+var h="";
+for(var i=0;i<CATS.length;i++){
+var c=CATS[i];
+h+='<div class="ct '+(S.cat===c[0]?"on":"")+'" onclick="setCat(\''+c[0]+'\')"><i>'+c[1]+'</i>'+c[2]+'</div>';
+}
+document.getElementById("cats").innerHTML=h;
+}
+
+function setCat(c){S.cat=c;renderCats();doRender();saveGame();}
+function toggleFav(id){var i=S.fav.indexOf(id);if(i<0)S.fav.push(id);else S.fav.splice(i,1);doRender();saveGame();}
+
+function ph(it){
+if(it.imgs&&it.imgs.length)return '<img src="'+url(it.imgs[0])+'" loading="lazy" onerror="this.parentNode.innerHTML=\'<div class=em>'+FB[it.ic]+'</div>\'">';
+return '<div class="em">'+FB[it.ic]+"</div>";
+}
+
+function card(it,src){
+var isF=S.fav.indexOf(it.id)>=0;
+var discount=it.mk>it.price?Math.round((it.mk-it.price)/it.mk*100):0;
+var h='<div class="cd"><div class="ci2" onclick="openD('+it.id+',\''+src+'\')">'+ph(it);
+h+='<button class="hrt'+(isF?" on":"")+'" onclick="event.stopPropagation();toggleFav('+it.id+')">'+(isF?"❤️":"🤍")+"</button>";
+if(it.rq==="legendary")h+='<div class="bdg">ЛЕГЕНДА</div>';
+else if(it.rq==="rare")h+='<div class="bdg">РЕДКИЙ</div>';
+h+="</div><div class=\"cb2\">";
+h+='<div class="nm" onclick="openD('+it.id+',\''+src+'\')">'+it.n+"</div>";
+h+='<div class="pr">'+fm(src==="inv"?(it.list||it.bought):it.price);
+if(discount>0)h+=' <span style="font-size:11px;color:#999;text-decoration:line-through">'+fm(it.mk)+'</span><span style="color:#f33;font-size:11px">↓</span>';
+h+="</div>";
+if(it.cat==="Авто"&&(it.ic==="car_sedan"||it.ic==="car_suv"||it.ic==="car_minivan"||it.ic==="car_sport")){
+h+='<div style="font-size:10px;color:#555;margin-top:3px;display:flex;gap:6px;flex-wrap:wrap">';
+if(it.mil!=null)h+='<span style="background:#f0f0f0;padding:1px 5px;border-radius:4px">📍 '+it.mil.toLocaleString("ru-RU")+' км</span>';
+if(it.dtp!=null){if(it.dtp)h+='<span style="background:#ffebee;color:#c62828;padding:1px 5px;border-radius:4px">⚠️ ДТП</span>';else h+='<span style="background:#e8f5e9;color:#2e7d32;padding:1px 5px;border-radius:4px">✓ Без ДТП</span>';}
+h+='</div>';
+}
+if(it.ic==="motorcycle"){
+h+='<div style="font-size:10px;color:#555;margin-top:3px"><span style="background:#e3f2fd;color:#1565c0;padding:1px 5px;border-radius:4px">🏍️ Мотоцикл</span></div>';
+}
+h+='<div class="mt">'+it.city+" · "+it.cond+" · "+it.yr+"</div>";
+if(src==="inv"){
+if(it.list)h+='<div class="acts"><button class="br" onclick="unlistItem('+it.id+')">Снять</button></div>';
+else{h+='<input id="lp'+it.id+'" type="number" value="'+Math.round(it.mk/100)*100+'" style="width:100%;padding:5px;border:1px solid #ddd;border-radius:6px;font-size:11px;margin-bottom:5px">';
+h+='<div class="acts"><button class="bb" onclick="listItem('+it.id+')">📢 Выставить</button></div>';}
+var ch=S.chats.filter(function(c){return c.item===it.id&&c.st==="act";});
+if(ch.length)h+='<div class="acts"><button class="bm" onclick="openChatById('+ch[0].id+')">💬 ('+ch.length+")</button></div>";
+}else{
+h+='<div class="acts"><button class="bb" '+(S.bal>=it.price?"":"disabled")+' onclick="buyItem('+it.id+')">Купить</button>';
+h+='<button class="bm" onclick="msgSeller('+it.id+')">💬</button></div>';
+}
+h+="</div></div>";return h;
+}
+
+function doRender(){
+updateStats();
+var arr=[];
+for(var i=0;i<S.mkt.length;i++){
+var it=S.mkt[i];
+if(S.cat!=="all"&&it.cat!==S.cat)continue;
+if(S.city!=="Все"&&it.city!==S.city)continue;
+if(S.q&&it.n.toLowerCase().indexOf(S.q)<0&&it.br.toLowerCase().indexOf(S.q)<0)continue;
+arr.push(it);
+}
+var el=document.getElementById("mkt");
+if(el){
+if(arr.length>0){var html="";for(var i=0;i<arr.length;i++)html+=card(arr[i],"mkt");el.innerHTML=html;}
+else el.innerHTML='<div class="emp">Ничего не найдено</div>';
+}
+}
+
+function renderFav(){
+var a=[];
+for(var i=0;i<S.inv.length;i++){if(S.fav.indexOf(S.inv[i].id)>=0)a.push(S.inv[i]);}
+for(var i=0;i<S.mkt.length;i++){if(S.fav.indexOf(S.mkt[i].id)>=0)a.push(S.mkt[i]);}
+var el2=document.getElementById("fav");
+if(el2){
+if(a.length>0){var html="";for(var i=0;i<a.length;i++){var isInv=S.inv.indexOf(a[i])>=0;html+=card(a[i],isInv?"inv":"mkt");}el2.innerHTML=html;}
+else el2.innerHTML='<div class="emp">Пусто</div>';
+}
+}
+
+function renderProf(){
+var el2=document.getElementById("rep2");if(el2)el2.textContent=S.rep;
+el2=document.getElementById("sd");if(el2)el2.textContent=S.deals;
+el2=document.getElementById("sa");if(el2)el2.textContent=S.ads;
+el2=document.getElementById("sf");if(el2)el2.textContent=S.fav.length;
+var listed=[];
+var notListed=[];
+for(var i=0;i<S.inv.length;i++){
+if(S.inv[i].list)listed.push(S.inv[i]);
+else notListed.push(S.inv[i]);
+}
+var el=document.getElementById("myads");
+if(!el)return;
+var h="";
+
+if(listed.length>0){
+h+='<div class="section-label green">📢 На продаже ('+listed.length+')</div>';
+for(var i=0;i<listed.length;i++){
+var it=listed[i];
+var chats=0;
+for(var j=0;j<S.chats.length;j++){if(S.chats[j].item===it.id&&S.chats[j].st==="act")chats++;}
+var imgHtml=FB[it.ic]||"📦";
+if(it.imgs&&it.imgs.length)imgHtml='<img src="'+url(it.imgs[0])+'" onerror="this.parentNode.innerHTML=\''+FB[it.ic]+'\'">';
+h+='<div class="ma" style="border-left:3px solid #28a745"><div class="th">'+imgHtml+'</div>';
+h+='<div class="info"><b>'+it.n+'</b><small>'+fm(it.list)+'</small>';
+h+='<span class="view">👁 '+(50+Math.floor(Math.random()*500))+' просмотров</span>';
+h+='<span class="status">💬 '+chats+' покупателей · 📍 '+it.city+'</span></div>';
+h+='<button onclick="unlistItem('+it.id+');renderProf()">Снять</button></div>';
+}
+}
+
+if(notListed.length>0){
+h+='<div class="section-label orange">📦 В инвентаре ('+notListed.length+')</div>';
+for(var i=0;i<notListed.length;i++){
+var it=notListed[i];
+var imgHtml=FB[it.ic]||"📦";
+if(it.imgs&&it.imgs.length)imgHtml='<img src="'+url(it.imgs[0])+'" onerror="this.parentNode.innerHTML=\''+FB[it.ic]+'\'">';
+h+='<div class="ma" style="border-left:3px solid #ff7a00"><div class="th">'+imgHtml+'</div>';
+h+='<div class="info"><b>'+it.n+'</b><small>Куплено за '+fm(it.bought)+'</small>';
+h+='<span class="view">📍 '+it.city+' · '+it.cond+'</span></div>';
+h+='<button style="background:#28a745" onclick="quickList('+it.id+')">📢 Выставить</button></div>';
+}
+}
+
+if(listed.length===0&&notListed.length===0){
+h='<div class="emp">Инвентарь пуст.<br>Купи что-нибудь на рынке!</div>';
+}
+
+if(S.npcBuyCount>0){
+h+='<div style="padding:10px 14px;background:#e8f5e9;border-radius:8px;margin-top:10px;font-size:12px">';
+h+='🎉 NPC купил у вас <b>'+S.npcBuyCount+'</b> товар(ов)';
+h+='</div>';
+}
+
+el.innerHTML=h;
+}
+
+function listItem(id){var it=null;for(var i=0;i<S.inv.length;i++){if(S.inv[i].id===id){it=S.inv[i];break;}}if(!it)return;var el=document.getElementById("lp"+id);var p=el?parseInt(el.value):0;if(!p||p<100){alert("Укажите цену");return;}it.list=p;S.ads++;log("📢 "+it.n+" за "+fm(p),"e");doRender();renderProf();saveGame();}
+function unlistItem(id){var it=null;for(var i=0;i<S.inv.length;i++){if(S.inv[i].id===id){it=S.inv[i];break;}}if(!it)return;it.list=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].item===id)S.chats[i].st="closed";}log("❌ Снял: "+it.n,"e");doRender();renderProf();saveGame();}
+function buyItem(id){var i=-1;for(var k=0;k<S.mkt.length;k++){if(S.mkt[k].id===id){i=k;break;}}if(i<0)return;var it=S.mkt[i];if(S.bal<it.price)return;S.bal-=it.price;it.bought=it.price;S.inv.push(it);S.mkt.splice(i,1);log("Куплено: "+it.n+" за "+fm(it.price),"b");doRender();saveGame();}
+
+function postAd(){
+var n=document.getElementById("an").value.trim();
+var p=parseInt(document.getElementById("ap").value);
+if(!n){alert("Название?");return;}
+if(!p||p<100){alert("Цена?");return;}
+var catVal=document.getElementById("ac").value;
+var icMap={};
+icMap["Электроника"]="phone";icMap["Авто"]="car_sedan";icMap["Для дома"]="box";icMap["Одежда"]="shoes";icMap["Спорт"]="scooter";icMap["Игры"]="console";icMap["Работа"]="briefcase";icMap["Коллекции"]="book";icMap["Растения"]="plant";icMap["Услуги"]="briefcase";
+var ic=icMap[catVal]||"box";
+var isCar=catVal==="Авто";
+var item={id:U(),n:n,ic:ic,br:document.getElementById("ab").value||"—",cat:catVal,base:p,price:p,mk:p,bought:0,list:p,rq:"common",dm:0.7,sp:{desc:document.getElementById("ad").value},imgs:[],cond:"Новый",yr:2024,city:S.city==="Все"?"Тольятти":S.city,district:"Центр",mil:isCar?0:null,dtp:isCar?false:null,owners:isCar?1:null,service:isCar?true:null,engine:isCar?"бензин":null,trans:isCar?"автомат":null,drive:isCar?"передний":null,color:isCar?"белый":null,warranty:null,box:null,seller:"Вы",rate:"5.0",day:S.day};
+S.inv.push(item);
+S.ads++;
+log("📢 "+n,"e");
+doRender();
+saveGame();
+alert("Опубликовано!");
+}
+
+function findBuyer(id){
+var it=null;for(var i=0;i<S.inv.length;i++){if(S.inv[i].id===id){it=S.inv[i];break;}}
+if(!it||!it.list){alert("Сначала выставите товар!");return;}
+var buyerType=it.cat==="Авто"?"автолюбитель":R(["щедрый","торгаш","обычный","коллекционер"]);
+var tp=BUYER_TYPES[buyerType];
+var r=tp.min+Math.random()*(tp.max-tp.min);
+var b={nm:R(BN),av:R(BA),color:R(AV_COLORS),pers:buyerType,cur:Math.round(it.list*r/100)*100,max:Math.round(it.list*tp.max/100)*100,pat:tp.pat,greet:tp.greet,isCar:tp.car||false};
+var ms=[{f:"t",x:tp.greet||R(GR)}];
+if(it.cat==="Авто")ms.push({f:"t",x:"Расскажите подробнее. Какой пробег? Были ли ДТП?"});
+else ms.push({f:"t",x:"Предлагаю "+fm(b.cur)});
+var c={id:U(),item:id,b:b,ms:ms,st:"act",from:"t",un:true,day:S.day};
+S.chats.push(c);
+log("🔍 Нашёлся: "+b.nm,"e");
+openChatById(c.id);
+saveGame();
+}
+
+function msgSeller(id){
+var it=null;for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id===id){it=S.mkt[i];break;}}
+if(!it)return;
+var lo=Math.round(it.price*(0.75+Math.random()*0.15)/100)*100;
+var b={nm:it.seller,av:R(BA),color:R(AV_COLORS),pers:"продавец",cur:lo,max:it.price,pat:3,itemPrice:it.price};
+var ms=[{f:"t",x:R(SG)},{f:"t",x:"Могу за "+fm(lo)}];
+var c={id:U(),item:id,b:b,ms:ms,st:"sell",from:"t",un:false,day:S.day};
+S.chats.push(c);
+openChatById(c.id);
+saveGame();
+}
+
+function mkBuyer(it){
+var buyerType=it.cat==="Авто"?"автолюбитель":R(["щедрый","торгаш","обычный","коллекционер"]);
+var tp=BUYER_TYPES[buyerType];
+var r=tp.min+Math.random()*(tp.max-tp.min);
+return{nm:R(BN),av:R(BA),color:R(AV_COLORS),pers:buyerType,cur:Math.round(it.list*r/100)*100,max:Math.round(it.list*tp.max/100)*100,pat:tp.pat,greet:tp.greet,isCar:tp.car||false};
+}
+
+function createChat(it){
+var b=mkBuyer(it);
+var ms=[{f:"t",x:b.greet||R(GR)}];
+if(b.isCar)ms.push({f:"t",x:"Расскажите подробнее. Какой пробег? Было ли ДТП?"});
+else ms.push({f:"t",x:"Предлагаю "+fm(b.cur)});
+S.chats.push({id:U(),item:it.id,b:b,ms:ms,st:"act",from:"t",un:true,day:S.day});
+S.un++;
+}
+
+function renderChats(){
+var act=[];
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].st!=="closed")act.push(S.chats[i]);}
+var cq=document.getElementById("chat-q");
+var search=cq?cq.value.toLowerCase():"";
+var filtered=[];
+for(var i=0;i<act.length;i++){
+var c=act[i];
+if(S.chatFilter==="unread"&&!c.un)continue;
+if(search){
+var it=findItem(c.item);
+if(!it)continue;
+if(c.b.nm.toLowerCase().indexOf(search)<0&&it.n.toLowerCase().indexOf(search)<0)continue;
+}
+filtered.push(c);
+}
+filtered.sort(function(a,b){return (b.day||0)-(a.day||0);});
+var el=document.getElementById("clist");
+if(!el)return;
+var h="";
+for(var i=0;i<filtered.length;i++){
+var c=filtered[i];
+var it=findItem(c.item);
+if(!it)continue;
+var last=c.ms[c.ms.length-1];
+var lastText=last?last.x:"";
+if(lastText.length>50)lastText=lastText.substring(0,50)+"...";
+var thumbHtml="";
+if(it.imgs&&it.imgs.length)thumbHtml='<img src="'+url(it.imgs[0])+'" onerror="this.style.display=\'none\'">';
+h+='<div class="ci4'+(c.un?" unread":"")+'" onclick="openChatById('+c.id+')">';
+h+='<div class="av7" style="background:'+c.b.color+'">'+c.b.nm.charAt(0);
+h+='<div class="prod-img">'+(thumbHtml||FB[it.ic])+'</div>';
+h+='</div>';
+h+='<div class="info4">';
+h+='<div class="row1"><b>'+c.b.nm+'</b><small>'+fmtDate(c.day||1)+'</small></div>';
+h+='<div class="row2"><span class="pname">'+it.n+'</span><span class="pprice">· '+fm(it.list||it.price)+'</span></div>';
+h+='<div class="row3">'+lastText+'</div>';
+h+='</div>';
+if(c.un)h+='<div class="dot"></div>';
+h+='</div>';
+}
+el.innerHTML=h||'<div class="emp">Нет сообщений</div>';
+}
+
+function findItem(id){
+for(var i=0;i<S.inv.length;i++){if(S.inv[i].id===id)return S.inv[i];}
+for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id===id)return S.mkt[i];}
+return null;
+}
+
+function openSupport(){
+var scr=document.getElementById("scr");
+if(scr)scr.classList.add("on");
+var el=document.getElementById("cav");if(el)el.textContent="🎧";
+el=document.getElementById("cnm");if(el)el.textContent="Поддержка Авито";
+el=document.getElementById("cst");if(el)el.textContent="официальный чат";
+var qq=document.getElementById("quick-q");
+if(qq){qq.innerHTML="";qq.style.display="none";}
+S.cur="support";
+var ms=[{f:"t",x:"Здравствуйте! Я поддержка Авито. Чем могу помочь?"},{f:"t",x:"Советы: 1) Выставляйте товары 2) Ищите дешёвые и продавайте дороже 3) Общайтесь с покупателями"}];
+var e=document.getElementById("mss");
+if(e){
+var html="";
+for(var i=0;i<ms.length;i++){
+var m=ms[i];
+html+='<div class="m '+(m.f==="o"?"o":"t")+'">'+m.x+'</div>';
+}
+e.innerHTML=html;
+}
+var el2=document.getElementById("cact");
+if(el2)el2.innerHTML='<div style="text-align:center;color:#888;padding:8px;font-size:12px">💡 Выставляйте товары в профиле</div>';
+}
+
+function parseQuestion(text){
+var low=text.toLowerCase();
+var keys=[];
+for(var k in ANSWERS)keys.push(k);
+for(var i=0;i<keys.length;i++){
+if(low.indexOf(keys[i])>=0)return keys[i];
+}
+return null;
+}
+
+function getAnswer(qType,item,buyer){
+var answers=null;
+if(item.cat==="Авто"&&CAR_ANSWERS[qType])answers=CAR_ANSWERS[qType];
+else if(ANSWERS[qType])answers=ANSWERS[qType];
+if(!answers)return null;
+var ans=R(answers);
+if(item.cat==="Авто"){
+if(qType==="пробег"&&item.mil!=null)ans="Пробег "+item.mil.toLocaleString("ru-RU")+" км, "+(item.mil<50000?"небольшой":"нормальный")+", не скручен.";
+if(qType==="дтп"){
+if(item.dtp)ans="К сожалению, было небольшое ДТП — восстановлен. Поэтому цена ниже.";
+else ans="Без ДТП, кузов в родной краске.";
+}
+if(qType==="владел"&&item.owners)ans="Владельцев по ПТС: "+item.owners+". "+(item.owners===1?"Я первый хозяин.":"Обслуживалась хорошо.");
+if(qType==="докум"||qType==="птс")ans="ПТС оригинал на руках, СТС чистое.";
+}
+return ans;
+}
+
+function getSmartResponse(text,item,buyer){
+var low=text.toLowerCase();
+var priceMatch=low.match(/(\d{1,3})\s*тыс?\.?\s*р?\.?\s*к?|(\d{4,7})\s*р?\.?\s*к?/);
+var offeredPrice=null;
+if(priceMatch){
+var raw=priceMatch[1]||priceMatch[2];
+offeredPrice=parseInt(raw);
+if(priceMatch[1]&&parseInt(priceMatch[1])<1000){
+offeredPrice=parseInt(priceMatch[1])*1000;
+}
+}
+
+if(buyer&&buyer.pers==="продавец"){
+var askPrice=buyer.cur||buyer.itemPrice||item.price;
+var minPrice=Math.round(askPrice*0.85/100)*100;
+
+if(offeredPrice!==null&&offeredPrice>0){
+if(offeredPrice>=askPrice){
+return {type:"accept_buy",text:"Отлично! Договорились за "+fm(askPrice)+". Когда встретимся?",price:askPrice};
+}else if(offeredPrice>=minPrice){
+return {type:"accept_buy",text:"Хорошо, давайте "+fm(offeredPrice)+" и по рукам! Когда встретимся?",price:offeredPrice};
+}else{
+return {type:"reject",text:fm(offeredPrice)+"? Нет, это слишком мало. Минимум "+fm(minPrice)+", не ниже."};
+}
+}
+
+if(low.indexOf("да")>=0||low.indexOf("ок")>=0||low.indexOf("беру")>=0||low.indexOf("давайте")>=0||low.indexOf("договорились")>=0||low.indexOf("хорошо")>=0||low.indexOf("согласен")>=0){
+return {type:"accept_buy",text:"Отлично! Забирайте за "+fm(askPrice)+". Когда встретимся?",price:askPrice};
+}
+
+if(low.indexOf("дорого")>=0||low.indexOf("не беру")>=0){
+var discount=Math.round(askPrice*0.9/100)*100;
+return {type:"counter_buy",text:"Понимаю. Могу уступить до "+fm(discount)+". Это моё последнее предложение.",price:discount};
+}
+
+if(low.indexOf("край")>=0||low.indexOf("город")>=0||low.indexOf("район")>=0){
+return {type:"info",text:"Я из "+item.city+", район "+(item.district||"центр")+". Могу встретиться в удобном месте."};
+}
+
+var qType=parseQuestion(text);
+if(qType){var ans=getAnswer(qType,item,buyer);if(ans)return {type:"answer",text:ans};}
+
+if(low.indexOf("привет")>=0||low.indexOf("здравств")>=0||low.indexOf("добрый")>=0){
+return {type:"greet",text:"Здравствуйте! Да, ещё в продаже. Интересует покупка?"};
+}
+
+return {type:"default",text:"Могу продать за "+fm(askPrice)+". Торг небольшой возможен."};
+}
+
+var minAcceptable=Math.round(item.list*0.7/100)*100;
+
+if(offeredPrice!==null&&offeredPrice>0){
+if(offeredPrice<minAcceptable){
+return {type:"reject",text:fm(offeredPrice)+"? Это слишком мало. Минимум "+fm(minAcceptable)+"."};
+}
+if(offeredPrice>=item.list){
+return {type:"accept_sell",text:"Отлично, договорились за "+fm(item.list)+"! Когда встретимся?",price:item.list};
+}else if(offeredPrice>=item.list*0.9){
+var mid=Math.round((offeredPrice+item.list)/2/100)*100;
+return {type:"counter_sell",text:"Близко! Давайте "+fm(mid)+" и по рукам?",price:mid};
+}else if(offeredPrice>=item.list*0.8){
+var minP=Math.round(item.list*0.9/100)*100;
+return {type:"counter_sell",text:fm(offeredPrice)+" маловато... Могу уступить до "+fm(minP)+".",price:minP};
+}else{
+return {type:"reject",text:fm(offeredPrice)+"? Это слишком мало. Минимум "+fm(minAcceptable)+"."};
+}
+}
+
+if(low.indexOf("за 0")>=0||low.indexOf("за ноль")>=0||low.indexOf("бесплатно")>=0){
+return {type:"reject",text:"Бесплатно? Извините, но нет. Минимальная цена "+fm(minAcceptable)+"."};
+}
+
+if(low.indexOf("беру")>=0||low.indexOf("ок")>=0||low.indexOf("давай")>=0||low.indexOf("согласен")>=0||low.indexOf("договорились")>=0||low.indexOf("хорошо")>=0){
+return {type:"ask_price",text:"Отлично! За какую цену забираете? Моё предложение — "+fm(buyer.cur)+"."};
+}
+
+if(low.indexOf("дорого")>=0||low.indexOf("не беру")>=0||low.indexOf("отказ")>=0){
+var newPrice=Math.round(buyer.cur*0.95/100)*100;
+return {type:"negotiate",text:"Понимаю. Могу уступить — "+fm(newPrice)+" — моё последнее слово.",price:newPrice};
+}
+
+var qType=parseQuestion(text);
+if(qType){var ans=getAnswer(qType,item,buyer);if(ans)return {type:"answer",text:ans};}
+
+if(low.indexOf("привет")>=0||low.indexOf("здравств")>=0||low.indexOf("добрый")>=0){
+return {type:"greet",text:"Здравствуйте! Да, ещё в продаже. Есть вопросы?"};
+}
+if(low.indexOf("спасибо")>=0||low.indexOf("благодар")>=0){
+return {type:"thanks",text:"Пожалуйста! Если надумаете — пишите."};
+}
+if(low.indexOf("пока")>=0||low.indexOf("до свидания")>=0){
+return {type:"bye",text:"До свидания! Хорошего дня!"};
+}
+
+return {type:"default",text:R(["Хорошо, понял.","Ок, давайте обсудим.","Понятно. Есть ещё вопросы?"])};
+}
+
+function getQuickQuestions(item){
+if(item.cat==="Авто")return ["Пробег?","ДТП было?","Документы?","ТО где делал?","Владельцев?","Торг?","Когда посмотреть?","Какой край?"];
+return ["Состояние?","Торг?","Когда забрать?","Комплект?","Гарантия?"];
+}
+
+function openChatById(id){
+var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===id){c=S.chats[i];break;}}
+if(!c)return;
+S.cur=id;
+c.un=false;
+S.un=Math.max(0,S.un-1);
+var it=findItem(c.item);
+var scr=document.getElementById("scr");
+if(scr)scr.classList.add("on");
+var el=document.getElementById("cav");if(el)el.textContent=c.b.av;
+el=document.getElementById("cnm");if(el)el.textContent=c.b.nm;
+el=document.getElementById("cst");
+if(el){
+var pm={};
+pm["щедрый"]="💎 щедрый";pm["торгаш"]="🤝 торгаш";pm["скупердяй"]="💸 экономный";
+pm["обычный"]="👤 обычный";pm["продавец"]="🏪 продавец";pm["коллекционер"]="🎯 коллекционер";pm["автолюбитель"]="🚗 автолюбитель";
+el.textContent=pm[c.b.pers]||"👤";
+}
+var qq=document.getElementById("quick-q");
+if(qq&&it){
+var questions=getQuickQuestions(it);
+var html="";
+for(var i=0;i<questions.length;i++)html+='<button onclick="askQuick(\''+questions[i]+'\')">'+questions[i]+'</button>';
+qq.innerHTML=html;
+qq.style.display="flex";
+}else if(qq){qq.innerHTML="";qq.style.display="none";}
+drawMessages();
+drawActions();
+}
+
+function sendTextMessage(){
+var input=document.getElementById("chat-input");
+if(!input)return;
+var text=input.value.trim();
+if(!text)return;
+input.value="";
+
+if(S.cur==="support"){
+addMessage("o",text);
+setTimeout(function(){addMessage("t","Спасибо за обращение! Поддержка Авито всегда рада помочь 💡");},600);
+return;
+}
+
+var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c)return;
+
+var it=findItem(c.item);
+if(!it)return;
+
+addMessage("o",text);
+
+var priceMatch=text.toLowerCase().match(/(\d{1,3})\s*тыс?\.?\s*р?\.?\s*к?|(\d{4,7})\s*р?\.?\s*к?/);
+if(priceMatch){
+var raw=priceMatch[1]||priceMatch[2];
+var offeredPrice=parseInt(raw);
+if(priceMatch[1]&&parseInt(priceMatch[1])<1000){
+offeredPrice=parseInt(priceMatch[1])*1000;
+}
+if(offeredPrice>100)c.last=offeredPrice;
+}
+
+c.from="o";
+drawActions();
+
+var delay=800+Math.random()*600;
+setTimeout(function(){
+var response=getSmartResponse(text,it,c.b);
+
+if(response.type==="accept_buy"){
+addMessage("t",response.text);
+var dealPrice=response.price||c.b.cur||c.b.itemPrice||it.price;
+setTimeout(function(){
+if(S.bal>=dealPrice){
+S.bal-=dealPrice;
+it.bought=dealPrice;
+S.inv.push(it);
+var newMkt=[];
+for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id!==it.id)newMkt.push(S.mkt[i]);}
+S.mkt=newMkt;
+S.deals++;
+log("Куплено: "+it.n+" за "+fm(dealPrice),"b");
+addMessage("s","💰 Куплено за "+fm(dealPrice));
+addMessage("s","✅ Товар добавлен в инвентарь");
+c.st="closed";
+drawActions();
+doRender();
+renderChats();
+updateStats();
+showInventoryButton(it.id);
+saveGame();
+}else{
+addMessage("t","У вас недостаточно средств! Нужно "+fm(dealPrice)+", у вас "+fm(S.bal));
+}
+},600);
+}else if(response.type==="counter_buy"){
+addMessage("t",response.text);
+if(response.price)c.b.cur=response.price;
+c.from="t";
+drawActions();
+}else if(response.type==="accept_sell"){
+addMessage("t",response.text);
+var dealPrice=response.price||it.list;
+setTimeout(function(){
+addMessage("s","💰 Сделка за "+fm(dealPrice));
+sellDone(c,it,dealPrice);
+showInventoryButton(it.id);
+saveGame();
+},600);
+}else if(response.type==="counter_sell"){
+addMessage("t",response.text);
+if(response.price)c.b.cur=response.price;
+c.from="t";
+drawActions();
+}else if(response.type==="deal"){
+addMessage("t",response.text);
+setTimeout(function(){
+var dealPrice=c.b.cur;
+if(c.st==="sell")dealPrice=c.b.itemPrice||it.price;
+addMessage("s","💰 Сделка за "+fm(dealPrice));
+if(c.st==="sell"){
+if(S.bal>=dealPrice){
+S.bal-=dealPrice;
+it.bought=dealPrice;
+S.inv.push(it);
+var newMkt=[];
+for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id!==it.id)newMkt.push(S.mkt[i]);}
+S.mkt=newMkt;
+S.deals++;
+log("Куплено: "+it.n+" за "+fm(dealPrice),"b");
+addMessage("s","✅ Товар добавлен в инвентарь");
+c.st="closed";
+drawActions();
+doRender();
+renderChats();
+updateStats();
+showInventoryButton(it.id);
+saveGame();
+}else{
+addMessage("t","У вас недостаточно средств!");
+}
+}else{
+sellDone(c,it,dealPrice);
+showInventoryButton(it.id);
+saveGame();
+}
+},800);
+}else if(response.type==="ask_price"){
+addMessage("t",response.text);
+c.from="t";
+drawActions();
+}else if(response.type==="info"||response.type==="answer"||response.type==="greet"||response.type==="thanks"||response.type==="bye"||response.type==="default"){
+addMessage("t",response.text);
+c.from="t";
+drawActions();
+}else if(response.type==="reject"){
+addMessage("t",response.text);
+c.from="t";
+drawActions();
+}else if(response.type==="negotiate"){
+addMessage("t",response.text);
+if(response.price)c.b.cur=response.price;
+c.from="t";
+drawActions();
+}
+},delay);
+}
+
+function showInventoryButton(itemId){
+var cact=document.getElementById("cact");
+if(!cact)return;
+var html='<div style="text-align:center;padding:10px">';
+html+='<button class="inv-btn" onclick="goToInventory('+itemId+')">📦 В инвентарь</button>';
+html+='</div>';
+cact.innerHTML=html;
+}
+
+function goToInventory(itemId){
+closeChat();
+sw("prof",4);
+setTimeout(function(){
+var myads=document.getElementById("myads");
+if(myads)myads.scrollIntoView({behavior:"smooth"});
+},300);
+}
+
+function askQuick(q){
+var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c)return;
+var it=findItem(c.item);
+if(!it)return;
+addMessage("o",q);
+c.from="o";
+setTimeout(function(){
+var qType=parseQuestion(q);
+if(qType){var ans=getAnswer(qType,it,c.b);if(ans)addMessage("t",ans);else addMessage("t","Хороший вопрос, всё расскажу при встрече.");}
+else addMessage("t","Да, всё как в объявлении. Есть ещё вопросы?");
+if(c.st==="act"&&c.b.isCar){
+setTimeout(function(){
+if(Math.random()<0.3)addMessage("t","Хорошо, предлагаю "+fm(c.b.cur)+". Договорились?");
+else if(Math.random()<0.2&&c.b.cur>=it.list*0.9)addMessage("t","Отлично, забираю за "+fm(it.list)+"!");
+},800);
+}
+},600+Math.random()*400);
+}
+
+function closeChat(){var el=document.getElementById("scr");if(el)el.classList.remove("on");S.cur=null;renderChats();}
+
+function drawMessages(){
+var c=null;
+if(S.cur==="support"){
+var e=document.getElementById("mss");
+if(e)e.innerHTML='<div class="m t">Здравствуйте! Я поддержка Авито. Чем могу помочь?</div><div class="m t">Советы: 1) Выставляйте товары 2) Ищите дешёвые и продавайте дороже 3) Общайтесь с покупателями</div>';
+return;
+}
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c)return;
+var e=document.getElementById("mss");
+if(!e)return;
+var html="";
+for(var i=0;i<c.ms.length;i++){
+var m=c.ms[i];
+if(m.f==="s")html+='<div class="m s">'+m.x+'</div>';
+else html+='<div class="m '+(m.f==="o"?"o":"t")+'">'+m.x+'</div>';
+}
+e.innerHTML=html;
+e.scrollTop=e.scrollHeight;
+}
+
+function addMessage(f,x){
+var c=null;
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c)return;
+c.ms.push({f:f,x:x});
+drawMessages();
+}
+
+function drawActions(){
+var c=null;
+if(S.cur==="support"){var el=document.getElementById("cact");if(el)el.innerHTML='<div style="text-align:center;color:#888;padding:8px;font-size:12px">💡 Пишите вопросы — поддержка ответит</div>';return;}
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c)return;
+var el=document.getElementById("cact");
+if(!el)return;
+var it=findItem(c.item);
+if(c.st==="agreed"){el.innerHTML='<div style="text-align:center;color:#28a745;font-weight:700;padding:8px">✅ Сделка</div>';return;}
+if(c.st==="left"){el.innerHTML='<div style="text-align:center;color:#d9534f;font-weight:700;padding:8px">❌ Ушёл</div>';return;}
+if(!it){el.innerHTML='<div style="text-align:center;color:#888;padding:8px">Товара нет</div>';return;}
+if(c.st==="sell"){
+var askPrice=c.b.cur||c.b.itemPrice||it.price;
+var html='<div style="text-align:center;font-size:11px;color:#666;margin-bottom:3px">Продавец просит: <b style="color:#00aaff">'+fm(askPrice)+'</b></div>';
+html+='<div class="row"><button class="ok" onclick="buyFromChat()">✅ Купить</button><button class="no" onclick="addMessage(\'o\',\'Дорого\');setStatus(\'left\')">❌</button></div>';
+el.innerHTML=html;
+return;
+}
+if(c.from==="o"){el.innerHTML='<div style="text-align:center;color:#888;font-style:italic;padding:8px">Печатает...</div>';return;}
+var html='<div style="text-align:center;font-size:11px;color:#666;margin-bottom:3px">Предлагает: <b style="color:#00aaff">'+fm(c.b.cur)+'</b></div>';
+html+='<div class="row"><button class="ok" onclick="acceptOffer()">✅ Принять</button><button class="no" onclick="rejectOffer()">❌</button></div>';
+if(c.b.isCar&&c.b.cur>=it.list*0.85)html+='<div class="row"><button class="ok" style="background:#00aaff" onclick="sellCarNow()">🚗 Продать сейчас</button></div>';
+el.innerHTML=html;
+}
+
+function setStatus(v){var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}if(c)c.st=v;drawActions();renderChats();}
+
+function sellDone(c,it,price){
+var profit=price-it.bought;
+S.bal+=price;S.prf+=profit;S.rep=Math.min(100,S.rep+2);S.deals++;
+log("Продано "+it.n+" за "+fm(price),"s");
+var newInv=[];for(var i=0;i<S.inv.length;i++){if(S.inv[i].id!==it.id)newInv.push(S.inv[i]);}S.inv=newInv;
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].item===it.id&&S.chats[i]!==c)S.chats[i].st="closed";}
+c.st="agreed";drawActions();renderChats();updateStats();saveGame();
+}
+
+function acceptOffer(){var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}if(!c)return;var it=findItem(c.item);if(!it)return;addMessage("o","Договорились!");setTimeout(function(){addMessage("s","💰 Сделка за "+fm(c.b.cur));sellDone(c,it,c.b.cur);},500);}
+
+function rejectOffer(){var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}if(!c)return;addMessage("o","Нет, не отдам.");c.from="o";drawActions();setTimeout(function(){buyerReact();},800);}
+
+function sellCarNow(){var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}if(!c)return;var it=findItem(c.item);if(!it)return;addMessage("o","Хорошо, забирайте за "+fm(c.b.cur)+"!");setTimeout(function(){addMessage("t","Отлично! Подъеду к вам.");setTimeout(function(){addMessage("s","💰 Машина продана за "+fm(c.b.cur));sellDone(c,it,c.b.cur);},800);},600);}
+
+function buyerReact(){
+var c=null;
+for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}
+if(!c||c.st!=="act")return;
+var it=findItem(c.item);
+if(!it||!it.list)return;
+var b=c.b;
+b.pat--;
+var myPrice=c.last;
+c.last=null;
+
+if(myPrice===undefined||myPrice===null){
+if(b.pat<=0||Math.random()<0.3){
+addMessage("t","Ладно, не беру. Удачи!");
+c.st="left";S.rep=Math.max(0,S.rep-1);drawActions();renderChats();return;
+}
+var maxPossible=Math.min(b.max,it.list);
+var bump=Math.round((maxPossible-b.cur)*0.3/100)*100;
+if(bump<100)bump=100;
+b.cur=Math.min(maxPossible,b.cur+bump);
+addMessage("t","Тогда "+fm(b.cur)+" — моё последнее предложение!");
+c.from="t";drawActions();return;
+}
+
+if(myPrice<=b.cur){
+addMessage("t","Отлично, забираю за "+fm(b.cur)+"!");
+setTimeout(function(){addMessage("s","💰 Сделка за "+fm(b.cur));sellDone(c,it,b.cur);},500);
+return;
+}
+
+if(myPrice<b.max){
+addMessage("t","Отлично, договорились за "+fm(myPrice)+"! Когда встретимся?");
+setTimeout(function(){addMessage("s","💰 Сделка за "+fm(myPrice));sellDone(c,it,myPrice);},500);
+return;
+}
+
+if(myPrice>=b.max){
+addMessage("t","Хорошо, давайте "+fm(b.max)+" и по рукам! Когда встретимся?");
+setTimeout(function(){addMessage("s","💰 Сделка за "+fm(b.max));sellDone(c,it,b.max);},500);
+return;
+}
+
+if(myPrice>it.list){
+addMessage("t","Вы сами выставили за "+fm(it.list)+", зачем предлагаете больше? Давайте за "+fm(it.list)+"!");
+c.from="t";drawActions();return;
+}
+
+if(b.pat<=0){
+addMessage("t","Ладно, давайте "+fm(b.cur)+" и по рукам!");
+setTimeout(function(){addMessage("s","💰 Сделка за "+fm(b.cur));sellDone(c,it,b.cur);},500);
+return;
+}
+
+var bump2=Math.round((b.max-b.cur)*0.4/100)*100;
+if(bump2<100)bump2=100;
+b.cur=Math.min(b.max,b.cur+bump2);
+addMessage("t","Могу добавить до "+fm(b.cur)+". Deal?");
+c.from="t";drawActions();
+}
+
+function buyFromChat(){var c=null;for(var i=0;i<S.chats.length;i++){if(S.chats[i].id===S.cur){c=S.chats[i];break;}}if(!c)return;var it=null;for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id===c.item){it=S.mkt[i];break;}}if(!it)return;if(S.bal<it.price){alert("Не хватает денег");return;}addMessage("o","Беру!");setTimeout(function(){S.bal-=it.price;it.bought=it.price;S.inv.push(it);var newMkt=[];for(var i=0;i<S.mkt.length;i++){if(S.mkt[i].id!==it.id)newMkt.push(S.mkt[i]);}S.mkt=newMkt;S.deals++;log("Куплено: "+it.n,"b");addMessage("s","💰 Куплено за "+fm(it.price));c.st="closed";drawActions();doRender();renderChats();saveGame();},600);}
+
+function quickList(id){
+var it=null;
+for(var i=0;i<S.inv.length;i++){if(S.inv[i].id===id){it=S.inv[i];break;}}
+if(!it)return;
+var price=prompt("Укажите цену для "+it.n+":",Math.round(it.mk/100)*100);
+if(!price)return;
+price=parseInt(price);
+if(!price||price<100){alert("Некорректная цена");return;}
+it.list=price;
+S.ads++;
+log("📢 "+it.n+" выставлен за "+fm(price),"e");
+doRender();
+renderProf();
+saveGame();
+alert("✅ "+it.n+" выставлен за "+fm(price)+"!\nПокупатели скоро напишут 💬");
+}
+
+function getDetailedDescription(it){
+var desc="";
+if(it.cat==="Авто"){
+desc="🚗 "+it.n+"\n\nГод: "+it.yr+"\n";
+if(it.color)desc+="Цвет: "+it.color+"\n";
+if(it.engine)desc+="Двигатель: "+it.engine+"\n";
+if(it.trans)desc+="КПП: "+it.trans+"\n";
+if(it.drive)desc+="Привод: "+it.drive+"\n";
+if(it.mil!=null)desc+="Пробег: "+(it.mil===0?"0 км (новый)":it.mil.toLocaleString("ru-RU")+" км")+"\n";
+if(it.owners)desc+="Владельцев по ПТС: "+it.owners+"\n";
+if(it.dtp!=null)desc+="ДТП: "+(it.dtp?"БЫЛО":"БЕЗ ДТП")+"\n";
+if(it.service!=null)desc+="ТО: "+(it.service?"У дилера":"Независимый сервис")+"\n";
+desc+="Состояние: "+it.cond+"\n\nДокументы чистые. ПТС оригинал.";
+}else if(it.cat==="Электроника"){
+desc="⚡ "+it.n+"\n\nБренд: "+it.br+"\nГод: "+it.yr+"\nСостояние: "+it.cond+"\n";
+if(it.warranty!=null)desc+="Гарантия: "+(it.warranty?"действует":"закончилась")+"\n";
+if(it.box!=null)desc+="Коробка: "+(it.box?"есть":"нет")+"\n";
+desc+="Товар проверен, работает без нареканий.";
+}else if(it.cat==="Игры"){
+desc="🎮 "+it.n+"\n\nБренд: "+it.br+"\nСостояние: "+it.cond+"\n";
+if(it.warranty!=null)desc+="Гарантия: "+(it.warranty?"есть":"нет")+"\n";
+if(it.box!=null)desc+="Комплектация: "+(it.box?"полная":"частичная")+"\n";
+desc+="Использовалось аккуратно.";
+}else if(it.cat==="Для дома"){
+desc="🏠 "+it.n+"\n\nБренд: "+it.br+"\nГод: "+it.yr+"\nСостояние: "+it.cond+"\nРаботает исправно.";
+}else if(it.cat==="Одежда"){
+desc="👕 "+it.n+"\n\nБренд: "+it.br+"\nСостояние: "+it.cond+"\nНосилось редко.";
+}else if(it.cat==="Спорт"){
+desc="🏃 "+it.n+"\n\nБренд: "+it.br+"\nСостояние: "+it.cond;
+}else if(it.cat==="Работа"){
+desc="💼 "+it.n+"\n\nОформление по ТК РФ.";
+}else if(it.cat==="Услуги"){
+desc="🛠️ "+it.n+"\n\nОпыт более 5 лет, гарантия.";
+}else if(it.cat==="Растения"){
+desc="🌿 "+it.n+"\n\nЗдоровое растение.";
+}else{
+desc="📦 "+it.n+"\n\nСостояние: "+it.cond+"\nГод: "+it.yr;
+}
+return desc;
+}
+
+function openD(id,src){
+var arr=src==="inv"?S.inv:S.mkt;
+var it=null;
+for(var i=0;i<arr.length;i++){if(arr[i].id===id){it=arr[i];break;}}
+if(!it)return;
+var imgs=it.imgs&&it.imgs.length?it.imgs:[null];
+var sl="";
+for(var i=0;i<imgs.length;i++){
+var f=imgs[i];
+if(f)sl+='<div style="flex:0 0 100%;height:100%;position:relative"><img src="'+urlB(f)+'" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.innerHTML=\'<div style=\\\'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px\\\'>'+FB[it.ic]+'</div>\'"></div>';
+else sl+='<div style="flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:80px;background:#f0f0f0">'+FB[it.ic]+'</div>';
+}
+var sp="";
+if(it.sp){
+var keys=[];
+for(var k in it.sp)keys.push(k);
+for(var i=0;i<keys.length;i++)sp+="<tr><td style='color:#888;padding:6px 4px'>"+keys[i]+"</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.sp[keys[i]]+"</td></tr>";
+}
+var ex="";
+if(it.mil!=null)ex+="<tr><td style='color:#888;padding:6px 4px'>Пробег</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.mil.toLocaleString("ru-RU")+" км</td></tr>";
+if(it.dtp!=null)ex+="<tr><td style='color:#888;padding:6px 4px'>ДТП</td><td style='text-align:right;font-weight:600;padding:6px 4px;color:"+(it.dtp?"#c62828":"#2e7d32")+"'>"+(it.dtp?"БЫЛО":"НЕ БЫЛО")+"</td></tr>";
+if(it.owners!=null)ex+="<tr><td style='color:#888;padding:6px 4px'>Владельцев</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.owners+"</td></tr>";
+if(it.engine)ex+="<tr><td style='color:#888;padding:6px 4px'>Двигатель</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.engine+"</td></tr>";
+if(it.trans)ex+="<tr><td style='color:#888;padding:6px 4px'>КПП</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.trans+"</td></tr>";
+if(it.drive)ex+="<tr><td style='color:#888;padding:6px 4px'>Привод</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.drive+"</td></tr>";
+if(it.color)ex+="<tr><td style='color:#888;padding:6px 4px'>Цвет</td><td style='text-align:right;font-weight:600;padding:6px 4px'>"+it.color+"</td></tr>";
+var isInv=src==="inv";
+var priceText=isInv?fm(it.list||it.bought):fm(it.price);
+var h='<div style="position:relative;height:280px;background:#eee;overflow:hidden"><div style="display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory" id="trk">'+sl+'</div><button style="position:absolute;top:50%;left:8px;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.95);border:none;font-size:16px" onclick="mvCar(-1)">‹</button><button style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.95);border:none;font-size:16px" onclick="mvCar(1)">›</button><button style="position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.5);color:#fff;border:none;font-size:16px" onclick="closeD()">✕</button></div>';
+h+='<div style="padding:14px"><h3 style="font-size:17px;font-weight:700">'+it.n+'</h3>';
+h+='<div style="font-size:12px;color:#888;margin:4px 0">'+it.br+" · "+it.city+" · "+it.yr+" · "+it.cond+'</div>';
+if(it.cat==="Авто"&&(it.ic==="car_sedan"||it.ic==="car_suv"||it.ic==="car_minivan"||it.ic==="car_sport")){
+h+='<div style="margin:6px 0">';
+if(it.mil!=null)h+='<span class="carbadge info">📍 '+it.mil.toLocaleString("ru-RU")+' км</span>';
+if(it.dtp!=null){if(it.dtp)h+='<span class="carbadge bad">⚠️ ДТП было</span>';else h+='<span class="carbadge ok">✓ Без ДТП</span>';}
+if(it.owners)h+='<span class="carbadge info">👤 Владельцев: '+it.owners+'</span>';
+h+='</div>';
+}
+if(it.ic==="motorcycle"){
+h+='<div style="margin:6px 0"><span class="carbadge info">🏍️ Мотоцикл</span></div>';
+}
+h+='<div style="font-size:22px;font-weight:800;margin:6px 0">'+priceText+'</div>';
+h+='<div style="display:flex;gap:10px;align-items:center;background:#f7f7f9;border-radius:10px;padding:10px;margin:10px 0"><div style="width:40px;height:40px;border-radius:50%;background:#00aaff;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px">'+R(BA)+'</div><div style="flex:1;font-size:12px"><b>'+it.seller+'</b><br><span style="color:#f5a623;font-weight:700">★ '+it.rate+'</span> · '+(10+Math.floor(Math.random()*200))+' отзывов</div></div>';
+h+='<table style="width:100%;border-collapse:collapse;font-size:12px;margin:10px 0"><tr><td style="color:#888;padding:6px 4px">Категория</td><td style="text-align:right;font-weight:600;padding:6px 4px">'+it.cat+'</td></tr><tr><td style="color:#888;padding:6px 4px">Год</td><td style="text-align:right;font-weight:600;padding:6px 4px">'+it.yr+'</td></tr><tr><td style="color:#888;padding:6px 4px">Город</td><td style="text-align:right;font-weight:600;padding:6px 4px">'+it.city+', '+it.district+'</td></tr>'+sp+ex+'</table>';
+h+='<div style="font-size:13px;font-weight:700;margin:10px 0 6px">Описание</div>';
+h+='<div class="ds">'+getDetailedDescription(it)+'</div>';
+h+='<div style="display:flex;gap:8px"><button style="flex:1;padding:12px;background:#f0f0f2;color:#333;border:none;border-radius:10px;font-size:14px;font-weight:700" onclick="closeD()">Назад</button>';
+if(isInv){
+if(it.list)h+='<button style="flex:1;padding:12px;background:#f33;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700" onclick="unlistItem('+it.id+');closeD()">Снять</button>';
+else h+='<button style="flex:1;padding:12px;background:#00aaff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700" onclick="closeD()">В инвентаре</button>';
+}else{
+if(S.bal>=it.price)h+='<button style="flex:1;padding:12px;background:#00aaff;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700" onclick="buyItem('+it.id+');closeD()">Купить</button>';
+else h+='<button style="flex:1;padding:12px;background:#ddd;color:#999;border:none;border-radius:10px;font-size:14px;font-weight:700" disabled>Купить</button>';
+h+='<button style="flex:1;padding:12px;background:#f0f0f2;color:#333;border:none;border-radius:10px;font-size:14px;font-weight:700" onclick="closeD();msgSeller('+it.id+')">💬</button>';
+}
+h+='</div></div>';
+var pd=document.getElementById("pd");
+if(!pd){
+pd=document.createElement("div");
+pd.id="pd";
+pd.style.cssText="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90;justify-content:center;align-items:flex-end";
+pd.onclick=function(e){if(e.target===this)closeD();};
+document.body.appendChild(pd);
+}
+pd.innerHTML='<div style="background:#fff;width:100%;max-width:520px;max-height:92vh;border-radius:18px 18px 0 0;overflow-y:auto">'+h+'</div>';
+pd.style.display="flex";
+}
+
+function closeD(){var el=document.getElementById("pd");if(el)el.style.display="none";}
+function mvCar(d){var t=document.getElementById("trk");if(t)t.scrollBy({left:d*t.clientWidth,behavior:"smooth"});}
+
+function nextDay(){
+if(S.day>=30){endGame();return;}
+S.day++;
+var ev=R(EV);
+if(ev){log(ev,"e");var el=document.getElementById("evt");if(el)el.textContent=ev;}
+else{var el=document.getElementById("evt");if(el)el.textContent="Спокойный день";}
+
+// Покупатели пишут на выставленные товары
+for(var i=0;i<S.inv.length;i++){
+var it=S.inv[i];
+if(!it.list)continue;
+var activeChats=0;
+for(var j=0;j<S.chats.length;j++){if(S.chats[j].item===it.id&&S.chats[j].st==="act")activeChats++;}
+if(activeChats>=2)continue;
+if(Math.random()<it.dm*0.7*(S.rep/100))createChat(it);
+}
+
+// ===== NPC ПОКУПАЮТ ТОВАРЫ У ИГРОКА =====
+var npcBought=[];
+for(var i=0;i<S.inv.length;i++){
+var it=S.inv[i];
+if(!it.list)continue;
+// 25% шанс что NPC купит (увеличено с 15%)
+if(Math.random()<0.25){
+// NPC покупает за 85-95% от цены продажи
+var buyerPrice=Math.round(it.list*(0.85+Math.random()*0.10)/100)*100;
+// Покупают только если прибыль >= 5%
+if(buyerPrice>=it.bought*1.05){
+npcBought.push({item:it,price:buyerPrice});
+}
+}
+}
+
+// Обрабатываем покупки NPC
+for(var k=0;k<npcBought.length;k++){
+var purchase=npcBought[k];
+var it=purchase.item;
+var buyerPrice=purchase.price;
+S.bal+=buyerPrice;
+var profit=buyerPrice-it.bought;
+S.prf+=profit;
+S.deals++;
+S.rep=Math.min(100,S.rep+1);
+S.npcBuyCount=(S.npcBuyCount||0)+1;
+log("🎉 NPC купил "+it.n+" за "+fm(buyerPrice)+" (прибыль: "+fm(profit)+")","s");
+// Удаляем товар из инвентаря
+var newInv=[];
+for(var j=0;j<S.inv.length;j++){if(S.inv[j].id!==it.id)newInv.push(S.inv[j]);}
+S.inv=newInv;
+// Закрываем связанные чаты
+for(var j=0;j<S.chats.length;j++){if(S.chats[j].item===it.id)S.chats[j].st="closed";}
+}
+
+if(npcBought.length>0){
+alert("🎉 NPC купил у вас "+npcBought.length+" товар(ов)!\nОбщая сумма: "+fm(npcBought.reduce(function(sum,p){return sum+p.price;},0)));
+}
+
+fill();doRender();sw("home",0);
+saveGame();
+if(S.day>=30)setTimeout(endGame,400);
+}
+
+function endGame(){
+var rk=S.bal<20000?"🥉 Новичок":S.bal<100000?"🏪 Перекуп":S.bal<1000000?"💼 Бизнесмен":S.bal<10000000?"💎 Миллионер":"🏆 Легенда";
+var el=document.getElementById("mt");if(el)el.textContent="Игра окончена!";
+el=document.getElementById("mx");
+if(el)el.innerHTML="30 дней!<br><br>💰 <b>"+fm(S.bal)+"</b><br>📈 <b>"+fm(S.prf)+"</b><br>🤝 <b>"+S.deals+"</b><br>🛒 NPC купил: <b>"+(S.npcBuyCount||0)+"</b><br>⭐ <b>"+S.rep+"/100</b><br>🏆 <b>"+rk+"</b>";
+el=document.getElementById("md");if(el)el.classList.add("on");
+localStorage.removeItem('avito_save');
+}
+
+var wrapEl=document.getElementById("wrap");
+if(wrapEl){
+wrapEl.addEventListener("scroll",function(){
+if(this.scrollTop+this.clientHeight>=this.scrollHeight-200)loadMore();
+});
+}
+
+var dayBtn=document.createElement("button");
+dayBtn.textContent="📅 Следующий день";
+dayBtn.style.cssText="position:fixed;bottom:70px;right:10px;padding:8px 12px;background:#00aaff;color:#fff;border:none;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;z-index:25;box-shadow:0 2px 8px rgba(0,0,0,.2)";
+dayBtn.onclick=nextDay;
+document.body.appendChild(dayBtn);
+
+// ===== ЗАГРУЗКА ИГРЫ =====
+var loaded=loadGame();
+if(loaded){
+log("💾 Игра загружена из сохранения","e");
+log("📅 День "+S.day,"e");
+if(S.npcBuyCount>0)log("🎉 NPC купил у вас "+S.npcBuyCount+" товар(ов)","s");
+}else{
+log("🎉 Добро пожаловать! 100 000 ₽","e");
+log("🛒 Тапни корзину — откроется инвентарь","e");
+log("📢 В профиле кнопка Выставить на продажу","e");
+log("🧠 Умные покупатели — торгуются правильно!","e");
+log("💾 Игра автоматически сохраняется","e");
+}
+
+fill();
+renderCats();
+doRender();
+
+// Автосохранение каждые 30 секунд
+setInterval(function(){saveGame();},30000);
+</script>
+</body>
+</html>
